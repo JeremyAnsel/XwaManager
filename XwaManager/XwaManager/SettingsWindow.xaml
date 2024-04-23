@@ -1,0 +1,76 @@
+﻿<Window x:Class="XwaManager.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+        xmlns:local="clr-namespace:XwaManager"
+        mc:Ignorable="d"
+        ui:ThemeManager.IsThemeAware="True"
+        ui:TitleBar.ExtendViewIntoTitleBar="False"
+        ui:WindowHelper.SystemBackdropType="Mica"
+        ui:TitleBar.IsBackButtonVisible="False"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Title="Settings"
+        Height="450"
+        Width="350"
+        UseLayoutRounding="True"
+        WindowStyle="ToolWindow"
+        WindowStartupLocation="CenterOwner">
+    <DockPanel>
+        <Button x:Name="saveButton"
+                DockPanel.Dock="Bottom"
+                Margin="20"
+                HorizontalAlignment="Center"
+                Click="SaveButton_Click">
+            <StackPanel Orientation="Horizontal">
+                <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Save}"
+                             FontSize="20"
+                             Margin="5 0 5 0" />
+                <TextBlock Text="Save settings" />
+            </StackPanel>
+        </Button>
+        <Grid>
+            <ScrollViewer Padding="10 0 10 0">
+                <StackPanel>
+                    <TextBlock Margin="0 10 0 0"
+                               Text="Theme"
+                               Style="{DynamicResource SubtitleTextBlockStyle}" />
+                    <StackPanel x:Name="themePanel"
+                                Margin="0 10 0 0">
+                        <RadioButton Content="Use system setting"
+                                     Tag="Default"
+                                     Checked="ThemePanelButton_Checked" />
+                        <RadioButton Content="Light"
+                                     Tag="Light"
+                                     Checked="ThemePanelButton_Checked" />
+                        <RadioButton Content="Dark"
+                                     Tag="Dark"
+                                     Checked="ThemePanelButton_Checked" />
+                    </StackPanel>
+                    <TextBlock Margin="0 10 0 0"
+                               Text="Directory"
+                               Style="{DynamicResource SubtitleTextBlockStyle}" />
+                    <DockPanel Margin="0 10 0 0">
+                        <Button x:Name="baseDirectoryBrowse"
+                                Click="BaseDirectoryBrowse_Click">
+                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.FileExplorer}"
+                                         FontSize="20" />
+                        </Button>
+                        <TextBlock Margin="10 0 0 0"
+                                   TextWrapping="Wrap"
+                                   Text="Select a directory containing your X-Wing Alliance installations." />
+                    </DockPanel>
+                    <TextBox x:Name="baseDirectoryBox"
+                             Margin="0 10 0 0" />
+                    <TextBlock Margin="0 10 0 0"
+                               Text="Update"
+                               Style="{DynamicResource SubtitleTextBlockStyle}" />
+                    <CheckBox x:Name="checkUpdatesOnStartupButton"
+                              Margin="0 10 0 0"
+                              Content="Check updates on startup" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+</Window>

@@ -1,0 +1,323 @@
+﻿<Window x:Class="XwaManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+        xmlns:xtk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:XwaManager"
+        mc:Ignorable="d"
+        ui:ThemeManager.IsThemeAware="True"
+        ui:TitleBar.ExtendViewIntoTitleBar="False"
+        ui:WindowHelper.SystemBackdropType="Mica"
+        ui:TitleBar.IsBackButtonVisible="False"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Title="X-Wing Alliance Manager"
+        Height="550"
+        Width="900"
+        UseLayoutRounding="True"
+        x:Name="window">
+    <Window.Resources>
+        <local:ViewModel x:Key="ViewModel" />
+        <xtk:VisibilityToBoolConverter x:Key="boolToVisibility"
+                                       Inverted="True" />
+        <xtk:VisibilityToBoolConverter x:Key="boolToVisibilityNot"
+                                       Inverted="True"
+                                       Not="True" />
+    </Window.Resources>
+    <Window.DataContext>
+        <Binding Source="{StaticResource ViewModel}" />
+    </Window.DataContext>
+    <xtk:BusyIndicator x:Name="busyIndicator"
+                       Background="{DynamicResource {x:Static ui:ThemeKeys.ApplicationPageBackgroundThemeBrushKey}}">
+        <DockPanel>
+            <StatusBar DockPanel.Dock="Bottom">
+                <Button ToolTip="Settings"
+                        Command="{Binding OpenSettingsWindowCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Settings}"
+                                     FontSize="20" />
+                        <TextBlock Text="Settings"
+                                   Margin="5 0 5 0" />
+                    </StackPanel>
+                </Button>
+                <Separator />
+                <local:ThemeSelectorControl Margin="5 0 5 0"
+                                            SelectedTheme="{Binding SelectedTheme}" />
+                <Separator />
+                <TextBlock Text="Version v" />
+                <TextBlock Text="{Binding AssemblyVersion}" />
+                <Separator />
+                <TextBlock Text="Directory: " />
+                <TextBlock Text="{Binding BaseDirectory}" />
+            </StatusBar>
+            <ui:CommandBarToolBar DockPanel.Dock="Top"
+                                  ToolBarTray.IsLocked="True"
+                                  HorizontalAlignment="Left"
+                                  Cursor="">
+                <Button ToolTip="Refresh the directories list"
+                        Command="{Binding RefreshDirectoriesCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Refresh}"
+                                     FontSize="20"
+                                     Margin="5 0 5 0" />
+                        <TextBlock Text="Refresh" />
+                    </StackPanel>
+                </Button>
+                <Button ToolTip="Browse the directories"
+                        Command="{Binding BrowseDirectoriesCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.FileExplorer}"
+                                     FontSize="20"
+                                     Margin="5 0 5 0" />
+                        <TextBlock Text="Browse" />
+                    </StackPanel>
+                </Button>
+                <Button ToolTip="Delete the selected directory"
+                        Command="{Binding DeleteDirectoryCommand}"
+                        CommandParameter="{Binding ElementName=directoryModelsList, Path=SelectedItem}">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Delete}"
+                                     FontSize="20"
+                                     Margin="5 0 5 0" />
+                        <TextBlock Text="Delete" />
+                    </StackPanel>
+                </Button>
+                <Button ToolTip="Rename the selected directory"
+                        Command="{Binding RenameDirectoryCommand}"
+                        CommandParameter="{Binding ElementName=directoryModelsList, Path=SelectedItem}">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Rename}"
+                                     FontSize="20"
+                                     Margin="5 0 5 0" />
+                        <TextBlock Text="Rename" />
+                    </StackPanel>
+                </Button>
+                <Button ToolTip="Create a copy of the selected directory"
+                        Command="{Binding CopyDirectoryCommand}"
+                        CommandParameter="{Binding ElementName=directoryModelsList, Path=SelectedItem}">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.CopyTo}"
+                                     FontSize="20"
+                                     Margin="5 0 5 0" />
+                        <TextBlock Text="Copy" />
+                    </StackPanel>
+                </Button>
+                <Button ToolTip="Check the version of all directories"
+                        Command="{Binding UpdateAllModVersionDataCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.ChecklistMirrored}"
+                                     FontSize="20"
+                                     Margin="5 0 5 0" />
+                        <TextBlock Text="Check updates" />
+                    </StackPanel>
+                </Button>
+                <Separator />
+                <ItemsControl ItemsSource="{x:Static local:ModVersionData.VersionUrls}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ui:HyperlinkButton Content="{Binding Key}"
+                                                NavigateUri="{Binding Value}"
+                                                ToolTip="{Binding Value}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ui:CommandBarToolBar>
+            <ListView x:Name="directoryModelsList"
+                      ItemsSource="{Binding DirectoryModels}"
+                      SelectionMode="Single"
+                      VerticalContentAlignment="Top"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Launch..."
+                                  Command="{Binding LaunchDirectoryLauncherCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Play}"
+                                             FontSize="20" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Open..."
+                                  Command="{Binding OpenDirectoryCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.FolderOpen}"
+                                             FontSize="20" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Copy..."
+                                  Command="{Binding CopyDirectoryCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.CopyTo}"
+                                             FontSize="20" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Rename..."
+                                  Command="{Binding RenameDirectoryCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Rename}"
+                                             FontSize="20" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Delete..."
+                                  Command="{Binding DeleteDirectoryCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Delete}"
+                                             FontSize="20" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Gray"
+                                BorderThickness="2"
+                                CornerRadius="5"
+                                Width="250"
+                                Height="250">
+                            <Grid VerticalAlignment="Top"
+                                  Height="230">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30" />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <DockPanel Grid.Column="0"
+                                           Grid.ColumnSpan="2"
+                                           Grid.Row="0">
+                                    <TextBlock DockPanel.Dock="Right"
+                                               Margin="5 0 5 0"
+                                               Text="{Binding VersionType}"
+                                               TextWrapping="Wrap"
+                                               FontWeight="Bold" />
+                                    <TextBlock Margin="5 0 0 5"
+                                               Text="{Binding DirectoryName}"
+                                               FontWeight="Bold"
+                                               TextWrapping="Wrap" />
+                                </DockPanel>
+                                <Image Grid.Column="0"
+                                       Grid.Row="1"
+                                       Source="{Binding Image}" />
+                                <DockPanel Grid.Column="1"
+                                           Grid.Row="1"
+                                           Margin=" 5 0 0 0">
+                                    <TextBlock DockPanel.Dock="Bottom"
+                                               Margin="0 5 0 0"
+                                               Text="{Binding ModVersionData.ModVersion}"
+                                               TextWrapping="Wrap" />
+                                    <ScrollViewer>
+                                        <TextBlock Text="{Binding Version}"
+                                                   TextWrapping="Wrap" />
+                                    </ScrollViewer>
+                                </DockPanel>
+                                <UniformGrid Grid.Column="1"
+                                             Grid.Row="2"
+                                             Margin="5 0 5 0"
+                                             Rows="1">
+                                    <Button Command="{Binding Source={StaticResource ViewModel}, Path=NavigateToCommand}"
+                                            CommandParameter="{Binding ModVersionData.MainInfoUrl}"
+                                            ToolTip="{Binding ModVersionData.MainFullName}"
+                                            Margin="1"
+                                            Padding="8 4 8 4">
+                                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Globe2}"
+                                                     FontSize="14" />
+                                    </Button>
+                                    <Button Command="{Binding Source={StaticResource ViewModel}, Path=NavigateToCommand}"
+                                            CommandParameter="{Binding ModVersionData.ModInfoUrl}"
+                                            ToolTip="{Binding ModVersionData.ModFullName}"
+                                            Margin="1"
+                                            Padding="8 4 8 4">
+                                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Globe2}"
+                                                     FontSize="14" />
+                                    </Button>
+                                    <Button Command="{Binding Source={StaticResource ViewModel}, Path=OpenDirectoryCommand}"
+                                            CommandParameter="{Binding}"
+                                            ToolTip="Open"
+                                            Margin="1"
+                                            Padding="8 4 8 4">
+                                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.FolderOpen}"
+                                                     FontSize="14" />
+                                    </Button>
+                                    <Button Command="{Binding Source={StaticResource ViewModel}, Path=LaunchDirectoryLauncherCommand}"
+                                            CommandParameter="{Binding}"
+                                            ToolTip="Launch"
+                                            Margin="1"
+                                            Padding="8 4 8 4">
+                                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Play}"
+                                                     FontSize="14" />
+                                    </Button>
+                                </UniformGrid>
+                                <StackPanel Grid.Column="0"
+                                            Grid.Row="2"
+                                            Margin="5 5 0 0"
+                                            Orientation="Horizontal">
+                                    <ui:FontIcon Visibility="{Binding IsUpdateAvailable, Mode=OneWay, Converter={StaticResource boolToVisibilityNot}}"
+                                                 Icon="{x:Static ui:SegoeFluentIcons.DevUpdate}"
+                                                 FontSize="16"
+                                                 Foreground="Gray"
+                                                 ToolTip="Is update available?" />
+                                    <ui:FontIcon Visibility="{Binding IsUpdateAvailable, Mode=OneWay, Converter={StaticResource boolToVisibility}}"
+                                                 Icon="{x:Static ui:SegoeFluentIcons.DevUpdate}"
+                                                 FontSize="16"
+                                                 FontWeight="Bold"
+                                                 Foreground="Green"
+                                                 ToolTip="Is update available?" />
+                                    <ui:FontIcon Visibility="{Binding IsUpdateAvailable, Mode=OneWay, Converter={StaticResource boolToVisibility}}"
+                                                 Icon="{x:Static ui:SegoeFluentIcons.CheckMark}"
+                                                 FontSize="16"
+                                                 FontWeight="Bold"
+                                                 Foreground="Green"
+                                                 Margin="5 0 0 0"
+                                                 ToolTip="Is update available?" />
+                                </StackPanel>
+                                <DockPanel Grid.Column="0"
+                                           Grid.ColumnSpan="2"
+                                           Grid.Row="3"
+                                           Margin="5 0 0 0">
+                                    <Button DockPanel.Dock="Left"
+                                            VerticalAlignment="Top"
+                                            IsEnabled="{Binding ModUpdateVersionData.IsFilled, FallbackValue=False}"
+                                            Command="{Binding Source={StaticResource ViewModel}, Path=NavigateToCommand}"
+                                            CommandParameter="{Binding ModUpdateVersionData.ModInfoUrl}"
+                                            ToolTip="{Binding ModUpdateVersionData.ModInfoUrl}">
+                                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Globe}"
+                                                     FontSize="16" />
+                                    </Button>
+                                    <DockPanel Margin="5 0 0 0">
+                                        <TextBlock DockPanel.Dock="Bottom"
+                                                   Margin="0 5 0 0"
+                                                   Text="{Binding ModUpdateVersionData.ModVersion}"
+                                                   TextWrapping="Wrap" />
+                                        <ScrollViewer>
+                                            <TextBlock Text="{Binding ModUpdateVersionData.ModFullName}"
+                                                       TextWrapping="Wrap" />
+                                        </ScrollViewer>
+                                    </DockPanel>
+                                </DockPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ListView>
+        </DockPanel>
+    </xtk:BusyIndicator>
+</Window>

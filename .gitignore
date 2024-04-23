@@ -396,3 +396,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+XwaManager/zip/*.dll
+XwaManager/zip/*.exe
+XwaManager/zip/*.config
+XwaManager/zip/*.pdb
+
