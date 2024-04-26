@@ -33,7 +33,7 @@ The features of XwaManager are:
 
 # Version file
 
-The name of the file is "mod-version-<MAINMOD>-<SUBMOD>.txt".
+The name of the file is `mod-version-<MAINMOD>-<SUBMOD>.txt`.
 It contains 6 lines.
 Lines 1 to 3 are related to MAINMOD.
 Lines 4 to 6 are related to SUBMOD.
@@ -46,4 +46,8 @@ For each group of 3 lines:
 
 To enable the check update feature, add the mod-version file to the install directory.
 The local version file is compared to the online version file.
+
+# Download
+
+[XwaManager.zip](https://github.com/JeremyAnsel/XwaManager/raw/main/XwaManager/zip/XwaManager.zip)
 
