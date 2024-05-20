@@ -127,8 +127,6 @@ internal static class Updater
 
     public static void Restart()
     {
-        MessageBox.Show("Restart()");
-
         using (var process = Process.GetCurrentProcess())
         {
             string arguments = process.StartInfo.Arguments;
