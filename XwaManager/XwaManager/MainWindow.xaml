@@ -46,7 +46,7 @@
                                             SelectedTheme="{Binding SelectedTheme}" />
                 <Separator />
                 <TextBlock Text="Version v" />
-                <TextBlock Text="{Binding AssemblyVersion}" />
+                <TextBlock Text="{Binding AssemblyVersionString}" />
                 <Separator />
                 <TextBlock Text="Directory: " />
                 <TextBlock Text="{Binding BaseDirectory}" />

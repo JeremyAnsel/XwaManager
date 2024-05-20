@@ -7,11 +7,16 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <Company>Jérémy Ansel</Company>
     <Copyright>Copyright © 2024 Jérémy Ansel</Copyright>
     <ApplicationIcon>Logo.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Remove="App.xaml" />
+    <Page Include="App.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="System.IO.Compression" />

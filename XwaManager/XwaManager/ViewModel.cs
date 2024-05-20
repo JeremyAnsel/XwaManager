@@ -30,6 +30,8 @@ public sealed partial class ViewModel : ObservableObject
 
     public SemVersion AssemblyVersion { get; private set; }
 
+    public string AssemblyVersionString => AssemblyVersion.WithoutMetadata().ToString();
+
     public SemVersion AssemblyVersionUpdate { get; private set; }
 
     [ObservableProperty]
@@ -328,14 +330,15 @@ public sealed partial class ViewModel : ObservableObject
 
         if (isManagerUpdateAvailable)
         {
-            var busyIndicator = (Application.Current.MainWindow as MainWindow)?.busyIndicator;
+            //var busyIndicator = (Application.Current.MainWindow as MainWindow)?.busyIndicator;
 
-            BusyAction.Run(busyIndicator, dispatcher =>
-            {
-                dispatcher(() => busyIndicator.BusyContent = "Self Update");
-                Updater.SelfUpdate();
-            });
+            //BusyAction.Run(busyIndicator, dispatcher =>
+            //{
+            //    dispatcher(() => busyIndicator.BusyContent = "Self Update");
+            //    Updater.SelfUpdate();
+            //});
 
+            Updater.RestartAutoUpdate();
             return;
         }
 
