@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System;
+using Semver;
 
 namespace XwaManager;
 
@@ -73,15 +74,15 @@ public sealed partial class DirectoryModel : ObservableObject
                 return false;
             }
 
-            Version currentVersion = ModVersionData.ModVersion;
-            Version updateVersion = ModUpdateVersionData.ModVersion;
+            SemVersion currentVersion = ModVersionData.ModVersion;
+            SemVersion updateVersion = ModUpdateVersionData.ModVersion;
 
             if (currentVersion is null || updateVersion is null)
             {
                 return false;
             }
 
-            bool check = currentVersion.CompareTo(updateVersion) < 0;
+            bool check = currentVersion.CompareSortOrderTo(updateVersion) < 0;
             return check;
         }
     }

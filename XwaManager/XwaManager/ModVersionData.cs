@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Semver;
+using System;
 using System.Collections.Generic;
 
 namespace XwaManager;
@@ -125,11 +126,11 @@ public sealed class ModVersionData
 
     public string MainVersionString { get; }
 
-    public Version MainVersion
+    public SemVersion MainVersion
     {
         get
         {
-            if (string.IsNullOrEmpty(MainVersionString) || !Version.TryParse(MainVersionString, out Version result))
+            if (string.IsNullOrEmpty(MainVersionString) || !SemVersion.TryParse(MainVersionString, SemVersionStyles.Any, out SemVersion result))
             {
                 return null;
             }
@@ -148,11 +149,11 @@ public sealed class ModVersionData
 
     public string ModVersionString { get; }
 
-    public Version ModVersion
+    public SemVersion ModVersion
     {
         get
         {
-            if (string.IsNullOrEmpty(ModVersionString) || !Version.TryParse(ModVersionString, out Version result))
+            if (string.IsNullOrEmpty(ModVersionString) || !SemVersion.TryParse(ModVersionString, SemVersionStyles.Any, out SemVersion result))
             {
                 return null;
             }

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Semver;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -16,12 +17,20 @@ public sealed partial class ViewModel : ObservableObject
 {
     public ViewModel()
     {
-        AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+        SemVersion.TryParse(
+            Assembly
+            .GetExecutingAssembly()
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            ?.InformationalVersion,
+            SemVersionStyles.Any,
+            out SemVersion version);
+
+        AssemblyVersion = version ?? new SemVersion(0);
     }
 
-    public Version AssemblyVersion { get; private set; }
+    public SemVersion AssemblyVersion { get; private set; }
 
-    public Version AssemblyVersionUpdate { get; private set; }
+    public SemVersion AssemblyVersionUpdate { get; private set; }
 
     [ObservableProperty]
     private int selectedTheme;
@@ -342,8 +351,8 @@ public sealed partial class ViewModel : ObservableObject
             return false;
         }
 
-        Version currentVersion = AssemblyVersion;
-        Version.TryParse(lines[0], out Version updateVersion);
+        SemVersion currentVersion = AssemblyVersion;
+        SemVersion.TryParse(lines[0], SemVersionStyles.Any, out SemVersion updateVersion);
         AssemblyVersionUpdate = updateVersion;
 
         if (currentVersion is null || updateVersion is null)
@@ -351,7 +360,7 @@ public sealed partial class ViewModel : ObservableObject
             return false;
         }
 
-        bool check = currentVersion.CompareTo(updateVersion) < 0;
+        bool check = currentVersion.CompareSortOrderTo(updateVersion) < 0;
 
         if (check)
         {
