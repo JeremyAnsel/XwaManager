@@ -288,6 +288,13 @@
                                                  Foreground="Green"
                                                  Margin="5 0 0 0"
                                                  ToolTip="Is update available?" />
+                                    <ui:FontIcon Visibility="{Binding DoesUpdateRequireReset, Mode=OneWay, Converter={StaticResource boolToVisibility}}"
+                                                 Icon="{x:Static ui:SegoeFluentIcons.ResetDrive}"
+                                                 FontSize="16"
+                                                 FontWeight="Bold"
+                                                 Foreground="Orange"
+                                                 Margin="5 0 0 0"
+                                                 ToolTip="The update requires a clean install." />
                                 </StackPanel>
                                 <DockPanel Grid.Column="0"
                                            Grid.ColumnSpan="2"

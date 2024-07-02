@@ -56,10 +56,12 @@ public sealed partial class DirectoryModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsUpdateAvailable))]
+    [NotifyPropertyChangedFor(nameof(DoesUpdateRequireReset))]
     private ModVersionData _modVersionData;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsUpdateAvailable))]
+    [NotifyPropertyChangedFor(nameof(DoesUpdateRequireReset))]
     private ModVersionData _modUpdateVersionData;
 
     public bool IsUpdateAvailable
@@ -83,6 +85,23 @@ public sealed partial class DirectoryModel : ObservableObject
             }
 
             bool check = currentVersion.CompareSortOrderTo(updateVersion) < 0;
+            return check;
+        }
+    }
+
+    public bool DoesUpdateRequireReset
+    {
+        get
+        {
+            if (!IsUpdateAvailable)
+            {
+                return false;
+            }
+
+            SemVersion currentVersion = ModVersionData.ModVersion;
+            SemVersion updateVersion = ModUpdateVersionData.ModVersion;
+
+            bool check = currentVersion.Major != updateVersion.Major;
             return check;
         }
     }
