@@ -10,6 +10,18 @@ namespace XwaManager;
 
 internal static class Updater
 {
+    public static void Cleanup()
+    {
+        string managerDirectory = GlobalSettings.XwaManagerDirectory;
+
+        string bakFilePath = Path.Combine(managerDirectory, "XwaManager.bak");
+
+        if (File.Exists(bakFilePath))
+        {
+            File.Delete(bakFilePath);
+        }
+    }
+
     public static void SelfUpdate()
     {
         string managerDirectory = GlobalSettings.XwaManagerDirectory;

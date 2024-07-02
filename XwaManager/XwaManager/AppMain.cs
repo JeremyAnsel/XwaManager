@@ -11,6 +11,8 @@ internal static class AppMain
     {
         string[] args = Environment.GetCommandLineArgs();
 
+        Updater.Cleanup();
+
         if (string.Equals(args[^1], "autoupdate", StringComparison.OrdinalIgnoreCase))
         {
             Updater.SelfUpdate();
