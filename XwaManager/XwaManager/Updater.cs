@@ -58,7 +58,7 @@ internal static class Updater
                 ".json",
             };
 
-            foreach (string file in Directory.EnumerateFiles(managerDirectory))
+            foreach (string file in Directory.EnumerateFiles(managerDirectory, "*", SearchOption.AllDirectories))
             {
                 string fileName = Path.GetFileName(file);
 
