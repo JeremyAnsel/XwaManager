@@ -64,6 +64,15 @@ public sealed partial class DirectoryModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(DoesUpdateRequireReset))]
     private ModVersionData _modUpdateVersionData;
 
+    [ObservableProperty]
+    private bool _isHooksUpdateAvailable;
+
+    [ObservableProperty]
+    private bool _isGoldenDDrawUpdateAvailable;
+
+    [ObservableProperty]
+    private bool _isEffectsDDrawUpdateAvailable;
+
     public bool IsUpdateAvailable
     {
         get
@@ -204,6 +213,10 @@ public sealed partial class DirectoryModel : ObservableObject
 
     public void UpdateVersionData()
     {
+        IsHooksUpdateAvailable = UpdateCheckerHooks.CheckHooksVersion(DirectoryPath);
+        IsGoldenDDrawUpdateAvailable = UpdateCheckerDDraw.CheckGoldenDDrawVersion(DirectoryPath);
+        IsEffectsDDrawUpdateAvailable = UpdateCheckerDDraw.CheckEffectsDDrawVersion(DirectoryPath);
+
         if (IsVanilla || ModVersionData is null || !ModVersionData.IsFilled)
         {
             return;
