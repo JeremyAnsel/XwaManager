@@ -65,6 +65,9 @@ public sealed partial class DirectoryModel : ObservableObject
     private ModVersionData _modUpdateVersionData;
 
     [ObservableProperty]
+    private bool _isLauncherUpdateAvailable;
+
+    [ObservableProperty]
     private bool _isHooksUpdateAvailable;
 
     [ObservableProperty]
@@ -213,6 +216,7 @@ public sealed partial class DirectoryModel : ObservableObject
 
     public void UpdateVersionData()
     {
+        IsLauncherUpdateAvailable = UpdateCheckerLauncher.CheckLauncherVersion(DirectoryPath);
         IsHooksUpdateAvailable = UpdateCheckerHooks.CheckHooksVersion(DirectoryPath);
         IsGoldenDDrawUpdateAvailable = UpdateCheckerDDraw.CheckGoldenDDrawVersion(DirectoryPath);
         IsEffectsDDrawUpdateAvailable = UpdateCheckerDDraw.CheckEffectsDDrawVersion(DirectoryPath);

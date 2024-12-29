@@ -13,6 +13,46 @@ internal static class UpdateCheckerHelpers
         return date;
     }
 
+    public static Version GetGithubLatestReleaseVersion(string dataUrl)
+    {
+        string data = GetGithubString(dataUrl);
+
+        if (string.IsNullOrEmpty(data))
+        {
+            return null;
+        }
+
+        string key = "<title>Release v";
+        int keyIndex = data.IndexOf(key);
+
+        if (keyIndex == -1)
+        {
+            return null;
+        }
+
+        int valueStartIndex = keyIndex + key.Length;
+        int valueIndex = data.IndexOfAny(new char[] { ' ', '<' }, valueStartIndex);
+
+        if (valueIndex == -1)
+        {
+            return null;
+        }
+
+        string versionString = data[valueStartIndex..valueIndex];
+
+        if (string.IsNullOrEmpty(versionString))
+        {
+            return null;
+        }
+
+        if (!Version.TryParse(versionString, out Version version))
+        {
+            return null;
+        }
+
+        return version;
+    }
+
     public static Version GetGithubRcFileVersion(string dataUrl)
     {
         string data = GetGithubString(dataUrl);

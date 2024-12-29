@@ -302,6 +302,19 @@
                                             Grid.Row="3"
                                             Margin="5 0 0 5"
                                             Orientation="Horizontal">
+                                    <ui:FontIcon Visibility="{Binding IsLauncherUpdateAvailable, Mode=OneWay, Converter={StaticResource boolToVisibilityNot}}"
+                                                 Icon="{x:Static ui:SegoeFluentIcons.AllApps}"
+                                                 FontSize="16"
+                                                 Foreground="Gray"
+                                                 Margin="5 0 0 0"
+                                                 ToolTip="Is a launcher update available?" />
+                                    <ui:FontIcon Visibility="{Binding IsLauncherUpdateAvailable, Mode=OneWay, Converter={StaticResource boolToVisibility}}"
+                                                 Icon="{x:Static ui:SegoeFluentIcons.AllApps}"
+                                                 FontSize="16"
+                                                 FontWeight="Bold"
+                                                 Foreground="Green"
+                                                 Margin="5 0 0 0"
+                                                 ToolTip="A launcher update is available." />
                                     <ui:FontIcon Visibility="{Binding IsHooksUpdateAvailable, Mode=OneWay, Converter={StaticResource boolToVisibilityNot}}"
                                                  Icon="{x:Static ui:SegoeFluentIcons.DeveloperTools}"
                                                  FontSize="16"
