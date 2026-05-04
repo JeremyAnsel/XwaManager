@@ -11,7 +11,7 @@ public sealed class ModVersionData
     {
         {"XWAU", "https://forums.xwaupgrade.com/viewforum.php?f=34" },
         {"TFTC", "https://sites.google.com/view/tie-fighter-total-conversion" },
-        {"EMBER", "https://forums.xwaupgrade.com/viewtopic.php?t=12968" },
+        {"EMBERS", "https://www.moddb.com/mods/embers-of-the-empire" },
     };
 
     private static string GetVersionUrl(string versionType)

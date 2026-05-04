@@ -23,7 +23,7 @@ public sealed partial class DirectoryModel : ObservableObject
     {
         "XWAU",
         "TFTC",
-        "EMBER",
+        "EMBERS",
     };
 
     [ObservableProperty]
